@@ -11,6 +11,10 @@ var app = app || {}; //not react stuff
                           document.getElementById('app')
                           ); 
   };
+
+  app.retrieveData = function() { 
+    return app.FIXTURES; //fake data..would want to do AJAX req
+  };
  app.init();
 })();
 //note this is just a flavour of React
