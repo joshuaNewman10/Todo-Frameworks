@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang ="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular todo App</title>
+</head>
+<body data-ng-app="todo">  
+
+  <section ng-controller="todoCtrl">
+    <div class="outer-container">
+
+       <div class="add-todo-group input-group input-group-lg">
+         <span class="input-group-addon">
+           <i class="glyphicon glyphicon-list-alt"></i>
+         </span>
+         <input ng-model="newTask" placeholder="New Todo" class="form-control" type="text"><!-- model  -->
+         {{ newTask | altCaps }}
+         <span class="input-group-btn">
+           <button class="btn btn-success" ng-click="addNewTask()" type="button"><!-- click  -->
+             <i class="glyphicon glyphicon-plus"></i>
+           </button>
+         </span>
+       </div>
+
+       <div ng-repeat="todo in todos" class="input-group input-group-lg"><!-- repeat  -->
+         <span class="input-group-addon">
+           <input ng-model="todo.completed" type="checkbox"> <!-- model -->
+         </span>
+         <input ng-model="todo.val" ng-class="{ finished: todo.completed }" class="form-control" type="text"><!-- model / class  -->
+         <span class="input-group-btn">
+           <button ng-click="removeTargetedTodo()" class="btn btn-danger" type="button"><!-- click  -->
+             <i complete-color="todo.completed" class="glyphicon glyphicon-remove"></i>
+             <!-- theres ng-hide too -->
+           </button>
+         </span>
+       </div>
+
+         <div class="btn-clear-group">
+           <button ng-click="clearCompleted()" class="btn btn-primary btn-clear">Clear Completed</button><!-- click -->
+         </div>
+       </div>
+  </section>
+
+  <script src="js/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/todoControl.js"></script>
+</body>
