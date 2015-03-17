@@ -4,6 +4,15 @@ window.TodoApp = new (Backbone.Router.extend({ //iife because will only ever hav
     this.todoItems = new TodoItems();
     this.todosView = new TodosView({collection: this.todoItems});
     this.todosView.render();
+
+    $('.btn.clear').click(function(e) {
+      window.TodoApp.todosView.filterCompleted();
+    });
+
+    $('.btn-success').click(function() {
+      window.TodoApp.todoItems.add({val: $('#newTodo').val(), completed: false}); //add new todo to items
+      $('#newTodo').val('');
+    });
   },
   index: function() {
     var fixtures = [
