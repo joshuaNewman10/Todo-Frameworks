@@ -21,7 +21,7 @@ app.components = app.components || {};
       return ( 
         <div className="outer-container"> 
           <NewTodo />
-          <TodoList />
+          <TodoList todos = {this.state.todos} />
           <ClearCompleted />
           <p>Interesting text goes here</p>
         </div>
@@ -38,24 +38,51 @@ app.components = app.components || {};
 var NewTodo = app.components.NewTodo = React.createClass({
   render: function() {
     return (
-            <h1>NewTodo</h1>
-            );
+      <div className="todos" {this.props.todos.map(function(element, index) {
+        return (
+          <TodoItem todo = {element} index = {index} />
+        );
+      })} 
+      </div>
+    );
   }
 });
 
 var TodoList = app.components.TodoList = React.createClass({
   render: function() {
     return (
-            <h1>Todo List</h1>
-            );
+      <h1>Todo List</h1>
+    );
+  }
+});
+
+var TodoItem = app.components.TodoItem = React.createClass({
+  render: function() {
+    var inputClassName = "form-control";
+    if ( this.props.todo.completed ) {
+      inputClassName += " finished";
+    }
+    return (
+      <div className="input-group input-group-lg">
+        <span className="input-group-addon">
+          <input checked= {this.props.todo.completed} type="checkbox" />
+        </span>
+        <input type="text" value = {this.props.todo.val} className={inputClassName} />
+        <span className = "input-group-btn">
+          <button className ="btn btn-danger" type="button">
+            <i className="glyphicon glyphicon-remove"></i>
+          </button.
+        </span>
+      </div>
+    );
   }
 });
 
 var ClearCompleted = app.components.ClearCompleted = React.createClass({
   render: function() {
     return (
-            <h1>Clear Completed</h1>
-            );
+      <h1>Clear Completed</h1>
+    );
   }
 });
 
