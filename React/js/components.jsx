@@ -52,6 +52,9 @@ app.components = app.components || {};
   });
   
   var TodoItem = app.components.TodoItem = React.createClass({
+    handleVal: function(event) {
+      this.props.updateVal(event.target.value, this.props.index); //javascript DOM stuff (https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
+    },
     render: function() {
       var inputClassName = "form-control";
       if ( this.props.todo.completed ) {
@@ -61,8 +64,8 @@ app.components = app.components || {};
         <div className = "input-group input-group-lg">
           <span className = "input-group-addon">
             <input checked = {this.props.todo.completed} type = "checkbox" />
-          </span>
-          <input type = "text" value = {this.props.todo.val} className = {inputClassName} />
+          </span> 
+          <input onChange={this.handleVal} type = "text" value = {this.props.todo.val} className = {inputClassName} />
           <span className = "input-group-btn">
             <button className = "btn btn-danger" type = "button">
               <i className = "glyphicon glypicon-remove"></i>
