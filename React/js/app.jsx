@@ -12,6 +12,11 @@ var app = app || {};
       document.getElementById('app')
     );
   };
-  
+
+  app.retrieveData = function() {
+    console.log('get data!');
+    return app.FIXTURES;
+  };
+
   app.init();
 })();
