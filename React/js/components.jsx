@@ -47,9 +47,22 @@ app.components = app.components || {};
   
   var TodoItem = app.components.TodoItem = React.createClass({
     render: function() {
-      console.log(this);
+      var inputClassName = "form-control";
+      if ( this.props.todo.completed ) {
+        inputClassName += " finished";
+      }
       return (
-        <p>{this.props.todo.val}</p>
+        <div className = "input-group input-group-lg">
+          <span className = "input-group-addon">
+            <input checked = {this.props.todo.completed} type = "checkbox" />
+          </span>
+          <input type = "text" value = {this.props.todo.val} className = {inputClassName} />
+          <span className = "input-group-btn">
+            <button className = "btn btn-danger" type = "button">
+              <i className = "glyphicon glypicon-remove"></i>
+            </button>
+          </span>
+        </div>
       );
     }
   });
