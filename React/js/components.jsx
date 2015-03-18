@@ -28,7 +28,9 @@ app.components = app.components || {};
       return (
         <div className="outer-container">
           <NewTodo />
-          <TodoList />
+          <TodoList
+            todos={this.state.todos}
+          />
           <ClearCompleted />
         </div>
       );
@@ -42,11 +44,29 @@ app.components = app.components || {};
       );
     }
   });
+  
+  var TodoItem = app.components.TodoItem = React.createClass({
+    render: function() {
+      console.log(this);
+      return (
+        <p>{this.props.todo.val}</p>
+      );
+    }
+  });
 
   var TodoList = app.components.TodoList = React.createClass({
     render: function() {
       return (
-        <p>Hi this is a new TodoList</p>
+        <div className="todos">
+          {this.props.todos.map(function(todo, index) {
+            return (
+              <TodoItem
+                todo={todo}
+                index={index}
+              />
+            );
+          })}
+        </div>
       );
     }
   });
