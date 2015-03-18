@@ -10,7 +10,12 @@ app.components = app.components || {};
     getInitialState: function() {
       return { //creating an initial state here
         todos: [] //would really want to get these via Ajax request
-      };
+      }; //note todos live here! State of parent elem is where they actually live
+    },
+    updateVal: function(val, index) { //since todos live at this level we must have update here
+      var state = this.state;
+      state.todos[index].val = val;
+      this.setState(state);
     },
     componentWillMount: function() { //comp about to be on page, what should i do first?
       console.log('about to put comp on page');
@@ -29,7 +34,8 @@ app.components = app.components || {};
         <div className="outer-container">
           <NewTodo />
           <TodoList
-            todos={this.state.todos}
+            todos = {this.state.todos}
+            updateVal = {this.updateVal} //pasing updateVal func from TodoApp to TodoList
           />
           <ClearCompleted />
         </div>
@@ -74,12 +80,14 @@ app.components = app.components || {};
           {this.props.todos.map(function(todo, index) {
             return (
               <TodoItem
-                todo={todo}
-                index={index}
+                todo = {todo}
+                index = {index}
+                updateVal = {this.props.updateVal} //passing function down from Todo App to TodoList to todoItem
+
               />
             );
-          })}
-        </div>
+          }.bind(this))} 
+        </div> //map ruins our cs
       );
     }
   });
