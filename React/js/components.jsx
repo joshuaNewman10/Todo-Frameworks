@@ -12,11 +12,6 @@ app.components = app.components || {};
         todos: [] //would really want to get these via Ajax request
       }; //note todos live here! State of parent elem is where they actually live
     },
-    updateVal: function(val, index) { //since todos live at this level we must have update here
-      var state = this.state;
-      state.todos[index].val = val;
-      this.setState(state);
-    },
     componentWillMount: function() { //comp about to be on page, what should i do first?
       console.log('about to put comp on page');
       //want to render app once here so we get 'perceived page load'
@@ -27,7 +22,21 @@ app.components = app.components || {};
       var data = app.retrieveData(); //react doesnt care how get data or store it
       this.setState({todos:data});
       console.log('current state of app:', this.state);
-
+    },
+    updateVal: function(val, index) { //since todos live at this level we must have update here
+      var state = this.state; //Brian's pattern, might be antipattern?
+      state.todos[index].val = val;
+      this.setState(state);
+    },
+    deleteTodo: function(index) {
+      var state = this.state;
+      state.todos.splice(index, 1);
+      this.setState(state);
+    },
+    toggleCompleted: function(index) {
+      var state = this.state;
+      state.todos[index].completed =  !state.todos[index].completed;
+      this.setState(state);
     },
     render: function() { //note react needs just ONE parent 'container' here is a div
       return (
@@ -36,6 +45,8 @@ app.components = app.components || {};
           <TodoList
             todos = {this.state.todos}
             updateVal = {this.updateVal} //pasing updateVal func from TodoApp to TodoList
+            toggleCompleted = {this.toggleCompleted}
+            deleteTodo = {this.deleteTodo}
           />
           <ClearCompleted />
         </div>
@@ -55,6 +66,12 @@ app.components = app.components || {};
     handleVal: function(event) {
       this.props.updateVal(event.target.value, this.props.index); //javascript DOM stuff (https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
     },
+    handleToggle: function(event) {
+      this.props.toggleCompleted(this.props.index);
+    },
+    handleDelete: function(event) {
+      this.props.deleteTodo(this.props.index);
+    },
     render: function() {
       var inputClassName = "form-control";
       if ( this.props.todo.completed ) {
@@ -63,11 +80,11 @@ app.components = app.components || {};
       return (
         <div className = "input-group input-group-lg">
           <span className = "input-group-addon">
-            <input checked = {this.props.todo.completed} type = "checkbox" />
+            <input onChange = {this.handleToggle} checked = {this.props.todo.completed} type = "checkbox" />
           </span> 
-          <input onChange={this.handleVal} type = "text" value = {this.props.todo.val} className = {inputClassName} />
+          <input onChange = {this.handleVal} type = "text" value = {this.props.todo.val} className = {inputClassName} />
           <span className = "input-group-btn">
-            <button className = "btn btn-danger" type = "button">
+            <button onClick = {this.handleDelete} className = "btn btn-danger" type = "button">
               <i className = "glyphicon glypicon-remove"></i>
             </button>
           </span>
@@ -86,7 +103,8 @@ app.components = app.components || {};
                 todo = {todo}
                 index = {index}
                 updateVal = {this.props.updateVal} //passing function down from Todo App to TodoList to todoItem
-
+                toggleCompleted = {this.props.toggleCompleted}
+                deleteTodo = {this.props.deleteTodo}
               />
             );
           }.bind(this))} 
