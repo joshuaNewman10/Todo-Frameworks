@@ -28,6 +28,12 @@ app.components = app.components || {};
       this.setState({todos:data});
       console.log('current state of app:', this.state);
     },
+    clearCompleted: function() {
+      var newTodos = this.state.todos.filter(function(todo, index) {
+        return !todo.completed;
+      }); 
+      this.setState({todos: newTodos}); //changing state to new filtered state
+    },
     updateVal: function(val, index) { //since todos live at this level we must have update here
       var state = this.state; //Brian's pattern, might be antipattern?
       state.todos[index].val = val;
@@ -55,7 +61,9 @@ app.components = app.components || {};
             toggleCompleted = {this.toggleCompleted}
             deleteTodo = {this.deleteTodo}
           />
-          <ClearCompleted />
+          <ClearCompleted 
+            clearCompleted = {this.clearCompleted}
+          />
         </div>
       );
     }
@@ -142,9 +150,15 @@ app.components = app.components || {};
   });
 
   var ClearCompleted = app.components.ClearCompleted = React.createClass({
+    handleClick: function(event) {
+      this.props.clearCompleted();
+    },
     render: function() {
       return (
-        <p>Hi this is the ClearCompeted Component</p>
+        <div className = "btn-clear-group">
+          <button onClick = {this.handleClick} className = "btn btn-primary btn-clear">Clear Completed
+          </button>
+        </div>
       );
     }
   });
