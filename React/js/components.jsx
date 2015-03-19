@@ -62,15 +62,25 @@ app.components = app.components || {};
   });
 
   var NewTodo = app.components.NewTodo = React.createClass({
+    mixins: [React.addons.LinkedStateMixin], //only works on states, NOT props,
+    getInitialState: function() { //setting value of NewTodo is relevant to the newTodo, not its parent so we change state here
+      return {
+        newValue: ''
+      }
+    },
+    handleNewTodo: function(event) {
+      this.props.createNewTodo(this.state.newValue); //linkState means newValue is always up to date with whatevr is in the input
+      this.setState({newValue: ''});
+    },
     render: function() {
       return (
         <div clasName = "add-todo-group input-group input-group-lg">
           <span className = "input-group-addon">
             <i className = "glyphicon glyphicon-list-alt"></i>
           </span>
-          <input placeholder = "New Todo" className = "form-control" type = "text" />
+          <input valueLink = {this.linkState('newValue')} placeholder = "New Todo" className = "form-control" type = "text" />
           <span className = "input-group-btn">
-            <button className = "btn btn-success" type = "button">
+            <button onClick = {this.handleNewTodo} className = "btn btn-success" type = "button">
               <i className = "glyphicon glyphicon-plus"></i>
             </button>
           </span>
