@@ -18,6 +18,11 @@ app.components = app.components || {};
       //then want to go get data (via AJAX) and set initial state
       //then CDM will get called via React
     },
+    createNewTodo: function(newValue) {
+      var state = this.state ;
+      state.todos.unshift({val: newValue, completed: false});
+      this.setState(state);
+    },
     componentDidMount: function() { //comp already on page
       var data = app.retrieveData(); //react doesnt care how get data or store it
       this.setState({todos:data});
@@ -41,7 +46,9 @@ app.components = app.components || {};
     render: function() { //note react needs just ONE parent 'container' here is a div
       return (
         <div className="outer-container">
-          <NewTodo />
+          <NewTodo
+            createNewTodo = {this.createNewTodo}
+          />
           <TodoList
             todos = {this.state.todos}
             updateVal = {this.updateVal} //pasing updateVal func from TodoApp to TodoList
@@ -57,7 +64,17 @@ app.components = app.components || {};
   var NewTodo = app.components.NewTodo = React.createClass({
     render: function() {
       return (
-        <p>Hello this is a newTodo</p>
+        <div clasName = "add-todo-group input-group input-group-lg">
+          <span className = "input-group-addon">
+            <i className = "glyphicon glyphicon-list-alt"></i>
+          </span>
+          <input placeholder = "New Todo" className = "form-control" type = "text" />
+          <span className = "input-group-btn">
+            <button className = "btn btn-success" type = "button">
+              <i className = "glyphicon glyphicon-plus"></i>
+            </button>
+          </span>
+        </div>
       );
     }
   });
@@ -105,6 +122,7 @@ app.components = app.components || {};
                 updateVal = {this.props.updateVal} //passing function down from Todo App to TodoList to todoItem
                 toggleCompleted = {this.props.toggleCompleted}
                 deleteTodo = {this.props.deleteTodo}
+                createNewTodo = {this.props.createNewTodo}
               />
             );
           }.bind(this))} 
