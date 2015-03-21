@@ -30,7 +30,9 @@ app.components = app.components || {};
       setInterval(this.loadCommentsFromServer, this.props.pollInterval);
     },
     handleCommentSubmit: function(comment) {
-     //TODO: submit to the server and refresh the list
+      var comments = this.state.comments;
+      var newComments = comments.concat([comment]);
+      this.setState({comments: newComments});
      $.ajax({
       url: this.props.url,
       dataType: 'json',
