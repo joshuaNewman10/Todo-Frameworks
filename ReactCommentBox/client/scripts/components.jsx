@@ -29,6 +29,23 @@ app.components = app.components || {};
       var data = this.loadCommentsFromServer();
       setInterval(this.loadCommentsFromServer, this.props.pollInterval);
     },
+    handleCommentSubmit: function(comment) {
+     //TODO: submit to the server and refresh the list
+     $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data:comment,
+      success: function(data) {
+        this.setState({
+          comments: data
+        });
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+     });
+    },
     render: function() {
       return (
         <div className="outer-container">
@@ -36,7 +53,9 @@ app.components = app.components || {};
           <CommentList 
            comments = {this.state.comments}
           />
-          <CommentForm />
+          <CommentForm 
+            onCommentSubmit = {this.handleCommentSubmit}
+          />
         </div>
       );
     }
@@ -60,11 +79,28 @@ app.components = app.components || {};
   });
 
   var CommentForm = app.components.CommentForm = React.createClass({
+    handleSubmit: function(event) {
+      event.preventDefault();
+      var author = React.findDOMNode(this.refs.author).value.trim();
+      var text = React.findDOMNode(this.refs.text).value.trim();
+      if( !text || !author ) {
+        return;
+      }
+      this.props.onCommentSubmit({
+        author: author,
+        text: text
+      });
+      React.findDOMNode(this.refs.author).value = '';
+      React.findDOMNode(this.refs.text).value = '';
+      return;
+    },
     render: function() {
       return (
-        <div className="commentForm">
-        Im the commentform
-        </div>
+        <form className ="commentForm" onSubmit = {this.handleSubmit}>
+          <input type="text" placeholder="your name" ref="author"/>
+          <input type="text" placeholder="say something..." ref="text"/>
+          <input type="submit" value="Post" />
+        </form>
       );
     }
   });

@@ -21,7 +21,7 @@ app.post('/comments.json', function(req, res) {
   fs.readFile('comments.json', function(err, data) {
     var comments = JSON.parse(data);
     comments.push(req.body);
-    fs.writeFile('comments.json', JSON.stringify(commnets, null, 4), function(err) {
+    fs.writeFile('comments.json', JSON.stringify(comments, null, 4), function(err) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Cache-Control', 'no-cache');
       res.send(JSON.stringify(comments));
